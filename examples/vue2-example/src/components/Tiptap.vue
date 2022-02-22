@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MatrixStatusBar />
+    <MatrixStatusBar :doc="yDoc" />
     <!-- <Heading sx={{ mb: 2 }}> -->
     <h2>Rich text collaboration</h2>
     <!-- </Heading> -->
@@ -25,11 +25,6 @@ import * as Y from "yjs";
 
 import MatrixStatusBar from '@/components/MatrixStatusBar.vue'
 
-const yDoc = new Y.Doc();
-const fragment = yDoc.getXmlFragment("richtext");
-console.log(yDoc, fragment)
-
-
 export default {
   name: "Tiptap",
   components: {
@@ -42,28 +37,35 @@ export default {
       default: '',
     },
   },
+  created(){
+
+  },
   data() {
     return {
       editor: null,
+      yDoc : new Y.Doc()
     }
   },
-  watch: {
-    value(value) {
-      // HTML
-      const isSame = this.editor.getHTML() === value
-
-      // JSON
-      // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
-
-      if (isSame) {
-        return
-      }
-
-      this.editor.commands.setContent(value, false)
-    },
-  },
+  // watch: {
+  //   value(value) {
+  //     console.log(value)
+  //     // HTML
+  //     const isSame = this.editor.getHTML() === value
+  //
+  //     // JSON
+  //     // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
+  //
+  //     if (isSame) {
+  //       return
+  //     }
+  //
+  //     this.editor.commands.setContent(value, false)
+  //   },
+  // },
 
   mounted() {
+    let fragment = this.yDoc.getXmlFragment("richtext");
+    console.log(this.yDoc, fragment)
     this.editor = new Editor({
       content: this.value,
       extensions: [

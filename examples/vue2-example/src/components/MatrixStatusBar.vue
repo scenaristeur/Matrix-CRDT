@@ -18,9 +18,9 @@
       value=false >Offline (disable sync)</b-form-radio>
     </b-form-radio-group>
   </b-form-group>
-
+<button @click="test">Test</button>
   <div class="mt-3">Online: <strong>{{ online }}</strong></div>
-  <div class="mt-3">Doc: <strong>{{ doc.status  }}</strong></div>
+  <!-- <div class="mt-3">Doc: <strong>{{ doc  }}</strong></div> -->
 
 </div>
 </template>
@@ -30,6 +30,7 @@ import LoginButton from '@/components/login/LoginButton.vue'
 
 export default {
   name: "MatrixStatusBar",
+  props: ['doc'],
   components: {
     LoginButton
   },
@@ -39,12 +40,17 @@ export default {
     }
   },
   methods:{
+    test(){
+      console.log(this.doc)
+    },
     onConnectChange(){
       console.log(this.online)
-
     }
   },
   watch:{
+    doc() {
+      console.log(this.doc)
+    },
     online(){
       this.onConnectChange()
     },
@@ -57,10 +63,10 @@ export default {
       get () { return this.$store.state.matrixClient },
       set (/*value*/) {  }
     },
-    doc: {
-      get () { return this.$store.state.doc },
-      set (/*value*/) {  }
-    },
+    // doc: {
+    //   get () { return this.$store.state.doc },
+    //   set (/*value*/) {  }
+    // },
   }
 }
 </script>

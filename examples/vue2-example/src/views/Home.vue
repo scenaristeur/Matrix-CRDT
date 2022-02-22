@@ -1,28 +1,29 @@
 <template>
   <div class="home">
-
-       <tiptap v-model="text"/>
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <b-container>
+      <tiptap />
+      <!-- <img alt="Vue logo" src="../assets/logo.png">
+      <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    </b-container>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+// import HelloWorld from '@/components/HelloWorld.vue'
 import Tiptap from '@/components/Tiptap.vue'
 
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
+    // HelloWorld,
     Tiptap
   },
-  data(){
-    return{
-      text: '<p>I’m running Tiptap with Vue.js. 🎉, yeah !!</p>'
-    }
-  }
+  // data(){
+  //   return{
+  //     text: '<p>I’m running Tiptap with Vue.js. 🎉, yeah !!</p>'
+  //   }
+  // }
 }
 </script>
