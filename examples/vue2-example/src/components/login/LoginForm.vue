@@ -6,7 +6,7 @@
           <label for="server-url"><code>Homeserver</code>:</label>
         </b-col>
         <b-col sm="9">
-          <b-form-input id="server-url" v-model="server.url"></b-form-input>
+          <b-form-input id="server-url" v-model="LoginData.server"></b-form-input>
         </b-col>
       </b-row>
 
@@ -16,7 +16,7 @@
         </b-col>
         <b-col sm="9">
           <b-form-input id="user"
-          v-model="server.user"
+          v-model="LoginData.user"
           placeholder="e.g.: @yousefed:matrix.org"
           ></b-form-input>
         </b-col>
@@ -29,11 +29,11 @@
         </b-col>
         <b-col sm="9">
           <b-form-group label="Sign in method" v-slot="{ ariaDescribedby }">
-            <b-form-radio v-model="server.authMethod"
+            <b-form-radio v-model="LoginData.authMethod"
             :aria-describedby="ariaDescribedby"
             name="some-radios"
             value="password">Password</b-form-radio>
-            <b-form-radio v-model="server.authMethod"
+            <b-form-radio v-model="LoginData.authMethod"
             :aria-describedby="ariaDescribedby"
             name="some-radios"
             value="token">Token</b-form-radio>
@@ -41,29 +41,32 @@
         </b-col>
       </b-row>
 
-      <b-row class="my-1" v-if="server.authMethod == 'token'">
+      <b-row class="my-1" v-if="LoginData.authMethod == 'token'">
         <b-col sm="3">
           <label for="token"><code>Access token</code>:</label>
         </b-col>
         <b-col sm="9">
           <b-form-input id="token"
-          v-model="server.token"
+          v-model="LoginData.token"
+          type="password"
           ></b-form-input>
-          <small><i>You can find your access token in Element Settings -&gt; Help &
-          About. <br>Your access token is only shared with the Matrix server.</i></small>
         </b-col>
+        <small><i>You can find your access token in Element Settings -&gt; Help &
+          About. <br>Your access token is only shared with the Matrix LoginData.
+        </i></small>
       </b-row>
 
-      <b-row class="my-1" v-if="server.authMethod == 'password'">
+      <b-row class="my-1" v-if="LoginData.authMethod == 'password'">
         <b-col sm="3">
           <label for="password"><code>Password</code>:</label>
         </b-col>
         <b-col sm="9">
           <b-form-input id="password"
-          v-model="server.password"
+          v-model="LoginData.password"
+          type="password"
           ></b-form-input>
-          <small><i>Your password is only shared with the Matrix server.</i></small>
         </b-col>
+        <small><i>Your password is only shared with the Matrix server.</i></small>
       </b-row>
 
 
@@ -73,21 +76,17 @@
         </b-col>
         <b-col sm="9">
           <b-form-input id="room"
-          v-model="server.roomAlias"
+          v-model="LoginData.roomAlias"
           placeholder="e.g.: #matrix-crdt-test:matrix.org"
           ></b-form-input>
+
         </b-col>
+        <small><i>
+          The room alias must start "#matrix-crdt-" for testing purposes.<br>
+          Room aliases should be of the format #alias:server.tld.<br>
+          The room that application state will be synced with.
+        </i></small>
       </b-row>
-
-
-
-
-
-
-
-
-
-
 
     </b-container>
   </b-modal>
@@ -98,13 +97,14 @@ export default {
   name: "LoginForm",
   methods:{
     login(){
-      console.log(this.server)
+      console.log(this.LoginData)
+      this.$store.dispatch('createMatrixClient', this.LoginData)
     }
   },
   computed: {
-    server: {
-      get () { return this.$store.state.server },
-      set (value) { this.$store.commit('setSession', value) }
+    LoginData: {
+      get () { return this.$store.state.LoginData },
+      set (value) { this.$store.commit('setLoginData', value) }
     },
   }
 }
