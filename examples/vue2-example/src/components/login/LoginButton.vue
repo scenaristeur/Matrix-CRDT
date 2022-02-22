@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button v-if="session == null" variant="success" @click="openLoginForm">
+    <b-button v-if="matrixClient == null" variant="success" @click="openLoginForm">
       Login
     </b-button>
     <b-button v-else variant="warning" @click="logout">
@@ -22,18 +22,17 @@ export default {
   methods: {
     openLoginForm(){
       console.log("open")
-      this.session = true
       this.$bvModal.show("modal-login-form")
     },
     logout(){
       console.log("logout")
-      this.session = null
+      this.matrixClient = null
     }
   },
   computed: {
-    session: {
-      get () { return this.$store.state.session },
-      set (value) { this.$store.commit('setSession', value) }
+    matrixClient: {
+      get () { return this.$store.state.matrixClient },
+      set (/*value*/) {  }
     },
   }
 }

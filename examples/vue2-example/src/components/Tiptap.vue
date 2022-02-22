@@ -1,22 +1,47 @@
 <template>
-  <editor-content :editor="editor" />
+  <div>
+    <MatrixStatusBar />
+    <!-- <Heading sx={{ mb: 2 }}> -->
+    <h2>Rich text collaboration</h2>
+    <!-- </Heading> -->
+    <p className="description">
+      A collaborative Rich Text editing experience (similar to Google Docs)
+      using <a href="https://github.com/YousefED/Matrix-CRDT">Matrix-CRDT</a>.
+      Edits can be synced to a Matrix Room. Users can work offline and edits
+      are seamlessly synced when they reconnect to the Matrix room.
+    </p>
+    MenuBar
+    <!-- <MenuBar editor={editor} /> -->
+    <editor-content :editor="editor" />
+  </div>
 </template>
 
 <script>
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
+import Collaboration from "@tiptap/extension-collaboration";
+import Placeholder from "@tiptap/extension-placeholder";
+import * as Y from "yjs";
+
+import MatrixStatusBar from '@/components/MatrixStatusBar.vue'
+
+const yDoc = new Y.Doc();
+const fragment = yDoc.getXmlFragment("richtext");
+console.log(yDoc, fragment)
+
 
 export default {
   name: "Tiptap",
   components: {
     EditorContent,
+    MatrixStatusBar,
   },
   props: {
-     value: {
-       type: String,
-       default: '',
-     },
-   },
+    value: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       editor: null,
@@ -43,14 +68,24 @@ export default {
       content: this.value,
       extensions: [
         StarterKit,
+        Placeholder.configure({
+          placeholder: "Write something …",
+        }),
+        Collaboration.configure({
+          fragment,
+        }),
+        // CollaborationCursor.configure({
+        //   provider: webrtcProvider,
+        //   user: { name: getRandomName(), color: getRandomColor() },
+        // }),
       ],
       onUpdate: () => {
-       // HTML
-       this.$emit('input', this.editor.getHTML())
+        // HTML
+        this.$emit('input', this.editor.getHTML())
 
-       // JSON
-       // this.$emit('input', this.editor.getJSON())
-     },
+        // JSON
+        // this.$emit('input', this.editor.getJSON())
+      },
     })
   },
 
